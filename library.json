@@ -6,12 +6,18 @@
     "type": "git",
     "url": "https://github.com/MitchBradley/json-streaming-parser.git"
   },
-  "authors": {
-    "name": "Daniel Eichhorn",
-    "url": "http://blog.squix.ch"
-  },
+  "authors": [
+      {
+          "name": "Daniel Eichhorn",
+          "url": "http://blog.squix.ch"
+      },
+      {
+          "name": "Mitch Bradley",
+          "url": "http://github.com/MitchBradley"
+      }
+  ],
   "version": "1.0.5-charp",
-  "frameworks": "arduino",
+  "frameworks": "*",
   "platforms": "*",
   "examples": [
     "examples/JsonStreamingParser/*.ino",

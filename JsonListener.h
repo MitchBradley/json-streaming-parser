@@ -25,7 +25,11 @@ See more at http://blog.squix.ch and https://github.com/squix78/json-streaming-p
 
 #pragma once
 
+#ifdef JSP_USE_CHARP
+#include <cstring>
+#else
 #include <Arduino.h>
+#endif
 
 class JsonListener {
   private:
@@ -36,9 +40,15 @@ class JsonListener {
   
     virtual void startDocument() = 0;
 
+#ifdef JSP_USE_CHARP
+    virtual void key(const char* key) = 0;
+
+    virtual void value(const char* value) = 0;
+#else
     virtual void key(String key) = 0;
 
     virtual void value(String value) = 0;
+#endif
 
     virtual void endArray() = 0;
 

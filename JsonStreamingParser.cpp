@@ -202,7 +202,7 @@ void JsonStreamingParser::parse(char c) {
   }
 
 void JsonStreamingParser::increaseBufferPointer() {
-  bufferPos = min(bufferPos + 1, BUFFER_MAX_LENGTH - 1);
+    bufferPos = bufferPos < BUFFER_MAX_LENGTH ? bufferPos + 1 : BUFFER_MAX_LENGTH;
 }
 
 void JsonStreamingParser::endString() {
@@ -210,11 +210,11 @@ void JsonStreamingParser::endString() {
     stackPos--;
     if (popped == STACK_KEY) {
       buffer[bufferPos] = '\0';
-      myListener->key(String(buffer));
+      myListener->key(buffer);
       state = STATE_END_KEY;
     } else if (popped == STACK_STRING) {
       buffer[bufferPos] = '\0';
-      myListener->value(String(buffer));
+      myListener->value(buffer);
       state = STATE_AFTER_VALUE;
     } else {
       // throw new ParsingError($this->_line_number, $this->_char_number,
@@ -249,7 +249,7 @@ void JsonStreamingParser::startValue(char c) {
     }
   }
 
-boolean JsonStreamingParser::isDigit(char c) {
+bool JsonStreamingParser::isDigit(char c) {
     // Only concerned with the first character in a number.
     return (c >= '0' && c <= '9') || c == '-';
   }
@@ -360,7 +360,7 @@ void JsonStreamingParser::processUnicodeCharacter(char c) {
       }*/
     }
   }
-boolean JsonStreamingParser::isHexCharacter(char c) {
+bool JsonStreamingParser::isHexCharacter(char c) {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
   }
 
@@ -381,7 +381,7 @@ int JsonStreamingParser::getHexArrayAsDecimal(char hexArray[], int length) {
     return result;
   }
 
-boolean JsonStreamingParser::doesCharArrayContain(char myArray[], int length, char c) {
+bool JsonStreamingParser::doesCharArrayContain(char myArray[], int length, char c) {
     for (int i = 0; i < length; i++) {
       if (myArray[i] == c) {
         return true;
@@ -404,7 +404,7 @@ void JsonStreamingParser::endUnicodeSurrogateInterstitial() {
 
 void JsonStreamingParser::endNumber() {
     buffer[bufferPos] = '\0';
-    String value = String(buffer);
+    // String value = String(buffer);
     //float result = 0.0;
     //if (doesCharArrayContain(buffer, bufferPos, '.')) {
     //  result = value.toFloat();
@@ -412,7 +412,8 @@ void JsonStreamingParser::endNumber() {
       // needed special treatment in php, maybe not in Java and c
     //  result = value.toFloat();
     //}
-    myListener->value(value.c_str());
+    // myListener->value(value.c_str());
+    myListener->value(buffer);
     bufferPos = 0;
     state = STATE_AFTER_VALUE;
   }
@@ -433,8 +434,7 @@ void JsonStreamingParser::endDocument() {
 
 void JsonStreamingParser::endTrue() {
     buffer[bufferPos] = '\0';
-    String value = String(buffer);
-    if (value.equals("true")) {
+    if (strcmp(buffer, "true") == 0) {
       myListener->value("true");
     } else {
       // throw new ParsingError($this->_line_number, $this->_char_number,
@@ -446,8 +446,7 @@ void JsonStreamingParser::endTrue() {
 
 void JsonStreamingParser::endFalse() {
     buffer[bufferPos] = '\0';
-    String value = String(buffer);
-    if (value.equals("false")) {
+    if (strcmp(buffer, "false") == 0) {
       myListener->value("false");
     } else {
       // throw new ParsingError($this->_line_number, $this->_char_number,
@@ -459,8 +458,7 @@ void JsonStreamingParser::endFalse() {
 
 void JsonStreamingParser::endNull() {
     buffer[bufferPos] = '\0';
-    String value = String(buffer);
-    if (value.equals("null")) {
+    if (strcmp(buffer, "null") == 0) {
       myListener->value("null");
     } else {
       // throw new ParsingError($this->_line_number, $this->_char_number,

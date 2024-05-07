@@ -35,6 +35,7 @@ void JsonStreamingParser::reset() {
     unicodeEscapeBufferPos = 0;
     unicodeBufferPos = 0;
     characterCounter = 0;
+    stackPos = 0;  // In case of a bad previous parse that left stackPos nonzero
 }
 
 void JsonStreamingParser::setListener(JsonListener* listener) {

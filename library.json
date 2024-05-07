@@ -16,7 +16,7 @@
           "url": "http://github.com/MitchBradley"
       }
   ],
-  "version": "1.0.5-charp",
+  "version": "char-1.0.2",
   "frameworks": "*",
   "platforms": "*",
   "examples": [
